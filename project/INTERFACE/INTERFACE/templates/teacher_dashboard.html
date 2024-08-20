@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Management Interface</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            border-bottom: 1px solid #fff;
+            position: relative;
+        }
+
+        #profile-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        #admin-panel {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            border-top: 1px solid #ccc;
+        }
+
+        #sidebar {
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #ccc;
+            height: 100vh;
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .menu-item {
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            color: #ff8c00;
+        }
+        
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        .add-row-btn {
+            margin-top: 10px;
+            padding: 8px;
+            cursor: pointer;
+
+        }
+        .return-btn {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <h1>SMART COMPUTER LAB</h1>
+        <div id="profile-icon" onclick="showProfile()">
+            <img src="path_to_your_round_human_icon.png" alt="PROFILE" style="width: 50px; height: 30px; border-radius: 30%;">
+        </div>
+    </div>
+
+    <div id="admin-panel">
+        <div id="sidebar">
+            <div class="menu-item" onclick="showLabManagementOptions()">LAB MANAGEMENT</div>
+            <!-- Additional options will be displayed dynamically for Lab Management -->
+
+            <!-- Initial content goes here -->
+        </div>
+
+        <div id="content">
+            <h2>WELCOME TEACHER</h2>
+            <!-- ... (existing content) ... -->
+        </div>
+    </div>
+
+    <script>
+        function showContent(content) {
+            // ... (existing showContent function) ...
+            if (content == 'Lab management') {
+                showLabManagementOptions();
+            }
+        }
+
+        function showLabManagementOptions() {
+            document.getElementById('content').innerHTML = '<h2>Lab Management</h2>';
+            document.getElementById('sidebar').innerHTML = `
+                <div class="menu-item" onclick="showAddNewLab()">Add New Lab</div>
+                <div class="menu-item" onclick="showViewExistingLabs()">View Existing Labs</div>
+                <div class="menu-item" onclick="showAttendance()">Attendance</div>
+            `;
+        }
+
+        function showAddNewLab() {
+    document.getElementById('content').innerHTML = `
+        <h2>ADD NEW LAB</h2>
+        <table class="lab-management">
+            <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Branch</th>
+                    <th>Year</th>
+                    <th>Section</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="classTableBody">
+                <tr>
+                    <td><input type="text" name="id"></td>
+                    <td><input type="text" name="name"></td>
+                    <td>
+                                    <select name="branch">
+                                        <option value="CS">CS</option>
+                                        <option value="EC">EC</option>
+                                        <option value="EEE">EEE</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="year">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="section">
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="NONE">NONE</option>
+                                    </select>
+                                </td>
+
+        
+                   
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="add-row-btn" onclick="addRow()">Add Row</button>
+    </form>
+    <button class="return-btn" onclick="showLabManagementOptions()">Return</button>
+
+`;
+}
+function addRow() {
+        // Add a new row to the Add Class table
+        var tableBody = document.getElementById('classTableBody');
+        var newRow = document.createElement('tr');
+        newRow.innerHTML = `
+        <td><input type="text" name="id"></td>
+                    <td><input type="text" name="name"></td>
+                    <td>
+                                    <select name="branch">
+                                        <option value="CS">CS</option>
+                                        <option value="EC">EC</option>
+                                        <option value="EEE">EEE</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="year">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="section">
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="NONE">NONE</option>
+                                    </select>
+                                </td>
+
+        `;
+        tableBody.appendChild(newRow);
+    }
+
+
+        function showViewExistingLabs() {
+            document.getElementById('content').innerHTML = `
+                <h2>View Existing Labs</h2>
+                <!-- View Existing Labs Content -->
+                <button class="return-btn" onclick="showLabManagementOptions()">Return</button>
+            `;
+        }
+
+        function showAttendance() {
+            document.getElementById('content').innerHTML = `
+                <h2>Attendance</h2>
+                <!-- Attendance Content -->
+                <button class="return-btn" onclick="showLabManagementOptions()">Return</button>
+            `;
+        }
+
+        function showProfile() {
+            alert("Profile icon clicked!");
+        }
+    </script>
+
+</body>
+</html>

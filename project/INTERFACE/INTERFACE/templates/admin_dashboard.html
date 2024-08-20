@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Interface</title>
+    <title>Upload File</title>
+    <link rel="stylesheet" href="/static/admin.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to toggle profile info visibility
+            function toggleProfileInfo() {
+                var profileInfo = document.getElementById('profile-info');
+                profileInfo.style.display = (profileInfo.style.display === 'block') ? 'none' : 'block';
+            }
+
+            // Function to handle sign out
+            function signOut() {
+                // Implement sign-out logic here
+                alert('Signing out...');
+            }
+
+            // Function to show the selected add form and hide others
+            function showAddForm(formId) {
+                var forms = document.querySelectorAll('#content > div');
+                forms.forEach(function(form) {
+                    form.style.display = (form.id === formId) ? 'block' : 'none';
+                });
+            }
+
+    function addClassRow() {
+    var tableBody = document.getElementById('classTableBody');
+    var newRow = document.createElement('tr');
+    
+    newRow.innerHTML = `
+        <td><input type="text" name="id" required></td>
+        <td>
+            <select name="branch" required>
+                <option value="D1">CS</option>
+                <option value="D2">EC</option>
+                <option value="D3">EEE</option>
+            </select>
+        </td>
+        <td>
+            <select name="year" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </td>
+        <td>
+            <select name="section" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="NONE">NONE</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="submit-class">Add</button>
+        </td>
+    `;
+    
+    // Append the new row to the table body
+    tableBody.appendChild(newRow);
+
+    // Add event listener to the "add" button
+    var addButton = newRow.querySelector('.submit-class');
+    addButton.addEventListener('click', function() {
+        var id = newRow.querySelector('[name="id"]').value;
+        var branch = newRow.querySelector('[name="branch"]').value;
+        var year = newRow.querySelector('[name="year"]').value;
+        var section = newRow.querySelector('[name="section"]').value;
+
+        // Send a POST request to the specified route
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/submit_class/${id}/${branch}/${year}/${section}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log('Class added successfully');
+                // You can perform additional actions upon success if needed
+            } else {
+                console.error('Failed to add class:', xhr.responseText);
+            }
+        };
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+        xhr.send();
+    });
+}
+
+    
+    
+    
+    // Function to add a row to the student table
+    function addStudentRow() {
+        var tableBody = document.getElementById('studentTableBody');
+        var newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" name="id" required></td>
+            <td><input type="text" name="password" required></td>
+            <td><input type="text" name="name" required></td>
+            <td><input type="text" name="rollno" required></td>
+            <td>
+                <select name="branch" required>
+                    <option value="D1">CS</option>
+                    <option value="D2">EC</option>
+                    <option value="D3">EEE</option>
+                </select>
+            </td>
+            <td>
+                <select name="year" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </td>
+            <td>
+                <select name="section" required>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="NONE">NONE</option>
+                </select>
+            </td>
+            <td><input type="text" name="email" required></td>
+            <td>
+                <button type="button" class="submit-student">Add</button>
+            </td>
+        `;
+
+// Append the new row to the table body
+tableBody.appendChild(newRow);
+
+// Add event listener to the "add" button
+var addButton = newRow.querySelector('.submit-student');
+addButton.addEventListener('click', function() {
+    var id = newRow.querySelector('[name="id"]').value;
+    var password = newRow.querySelector('[name="password"]').value;
+    var name = newRow.querySelector('[name="name"]').value;
+    var rollno = newRow.querySelector('[name="rollno"]').value;
+    var branch = newRow.querySelector('[name="branch"]').value;
+    var year = newRow.querySelector('[name="year"]').value;
+    var section = newRow.querySelector('[name="section"]').value;
+    var email = newRow.querySelector('[name="email"]').value;
+
+    // Send a POST request to the specified route
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', `/submit_student/${id}/${password}/${name}/${rollno}/${branch}/${year}/${section}/${email}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('Student added successfully');
+            // You can perform additional actions upon success if needed
+        } else {
+            console.error('Failed to add student:', xhr.responseText);
+        }
+    };
+    xhr.onerror = function() {
+        console.error('Request failed');
+    };
+    xhr.send();
+});
+}
+
+
+
+
+// Function to add a row to the teacher table
+function addTeacherRow() {
+    var tableBody = document.getElementById('teacherTableBody');
+    var newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td><input type="text" name="id" required></td>
+        <td><input type="text" name="password" required></td>
+        <td><input type="text" name="name" required></td>
+        <td>
+            <select name="department" required>
+                <option value="D1">CS</option>
+                <option value="D2">EC</option>
+                <option value="D3">EEE</option>
+            </select>
+        </td>
+        <td><input type="text" name="email" required></td>
+        <td>
+            <button type="button" class="submit-teacher">Add</button>
+        </td>
+    `;
+// Append the new row to the table body
+tableBody.appendChild(newRow);
+
+// Add event listener to the "add" button
+var addButton = newRow.querySelector('.submit-teacher');
+addButton.addEventListener('click', function() {
+    var id = newRow.querySelector('[name="id"]').value;
+    var password = newRow.querySelector('[name="password"]').value;
+    var name = newRow.querySelector('[name="name"]').value;
+    var department = newRow.querySelector('[name="department"]').value;
+    var email = newRow.querySelector('[name="email"]').value;
+
+    // Send a POST request to the specified route
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', `/submit_teacher/${id}/${password}/${name}/${department}/${email}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('Teacher added successfully');
+            // You can perform additional actions upon success if needed
+        } else {
+            console.error('Failed to add student:', xhr.responseText);
+        }
+    };
+    xhr.onerror = function() {
+        console.error('Request failed');
+    };
+    xhr.send();
+});
+}
+
+
+// Find all buttons with the class "update-class"
+var updateButtons = document.querySelectorAll('.update-class');
+
+// Add click event listener to each button
+updateButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Get the class ID from the data attribute
+        var classId = this.getAttribute('data-id');
+
+        // Find the closest row containing the input fields
+        var row = this.closest('tr');
+        // Extract values from input fields
+        var id = row.querySelector('[name="id"]').value;
+        var branch = row.querySelector('[name="branch"]').value;
+        var year = row.querySelector('[name="year"]').value;
+        var section = row.querySelector('[name="section"]').value;
+
+        // Prepare data to send to the server
+        var formData = new FormData();
+        formData.append('id', id);
+        formData.append('branch', branch);
+        formData.append('year', year);
+        formData.append('section', section);
+
+        // Send data to the server using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/update_class/' + id + '/' + branch + '/' + year + '/' + section, true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Update successful, handle response
+                console.log('Update successful:', xhr.responseText);
+            } else {
+                // Update failed, handle error
+                console.error('Update failed:', xhr.responseText);
+            }
+        };
+        xhr.onerror = function() {
+            // Handle network errors
+            console.error('Network error occurred.');
+        };
+        xhr.send(formData);
+    });
+});
+
+// Find all buttons with the class "update-student"
+var updateButtons = document.querySelectorAll('.update-student');
+
+// Add click event listener to each button
+updateButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Get the student ID from the data attribute
+        var studentId = this.getAttribute('data-id');
+
+        // Find the closest row containing the input fields
+        var row = this.closest('tr');
+
+        // Extract values from input fields
+        var id = row.querySelector('[name="id"]').value;
+        var password = row.querySelector('[name="password"]').value;
+        var name = row.querySelector('[name="name"]').value;
+        var rollno = row.querySelector('[name="rollno"]').value;
+        var branch = row.querySelector('[name="branch"]').value;
+        var year = row.querySelector('[name="year"]').value;
+        var section = row.querySelector('[name="section"]').value;
+        var email = row.querySelector('[name="email"]').value;
+
+        // Prepare data to send to the server
+        var formData = new FormData();
+        formData.append('id', id);
+        formData.append('password', password);
+        formData.append('name', name);
+        formData.append('rollno', rollno);
+        formData.append('branch', branch);
+        formData.append('year', year);
+        formData.append('section', section);
+        formData.append('email', email);
+
+        // Send data to the server using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/update_student/${id}/${password}/${name}/${rollno}/${branch}/${year}/${section}/${email}`, true);
+
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Update successful, handle response
+                console.log('Update successful:', xhr.responseText);
+            } else {
+                // Update failed, handle error
+                console.error('Update failed:', xhr.responseText);
+            }
+        };
+        xhr.onerror = function() {
+            // Handle network errors
+            console.error('Network error occurred.');
+        };
+        xhr.send(formData);
+    });
+});
+
+
+
+// Find all buttons with the class "update-teacher"
+var updateButtons = document.querySelectorAll('.update-teacher');
+
+// Add click event listener to each button
+updateButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Get the student ID from the data attribute
+        var teacherId = this.getAttribute('data-id');
+
+        // Find the closest row containing the input fields
+        var row = this.closest('tr');
+
+        // Extract values from input fields
+        var id = row.querySelector('[name="id"]').value;
+        var password = row.querySelector('[name="password"]').value;
+        var name = row.querySelector('[name="name"]').value;
+        var department = row.querySelector('[name="department"]').value;
+        var email = row.querySelector('[name="email"]').value;
+
+        // Prepare data to send to the server
+        var formData = new FormData();
+        formData.append('id', id);
+        formData.append('password', password);
+        formData.append('name', name);
+        formData.append('department', department);
+        formData.append('email', email);
+
+        // Send data to the server using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/update_teacher/${id}/${password}/${name}/${department}/${email}`, true);
+
+
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Update successful, handle response
+                console.log('Update successful:', xhr.responseText);
+            } else {
+                // Update failed, handle error
+                console.error('Update failed:', xhr.responseText);
+            }
+        };
+        xhr.onerror = function() {
+            // Handle network errors
+            console.error('Network error occurred.');
+        };
+        xhr.send(formData);
+    });
+});
+
+
+
+            // Attach event listeners
+            document.getElementById('profile-icon').addEventListener('click', toggleProfileInfo);
+            document.getElementById('sign-out-btn').addEventListener('click', signOut);
+            document.getElementById('addClassBtn').addEventListener('click', function() {
+                showAddForm('addClassForm');
+            });
+            document.getElementById('addClassRowBtn').addEventListener('click', addClassRow);
+
+            document.getElementById('addStudentBtn').addEventListener('click', function() {
+                showAddForm('addStudentForm');
+            });
+            document.getElementById('addTeacherBtn').addEventListener('click', function() {
+                showAddForm('addTeacherForm');
+            });
+            document.getElementById('addClassRowBtn').addEventListener('click', addClassRow);
+            document.getElementById('addStudentRowBtn').addEventListener('click', addStudentRow);
+            document.getElementById('addTeacherRowBtn').addEventListener('click', addTeacherRow);
+          
+    </script>
+</head>
+<body>
+    
+<div id="header">
+    <h1>Smart Lab</h1>
+    <div id="profile-icon">
+        <img src="/static/picc.jpg" alt="PROFILE" style="width: 30px; height: 30px; border-radius: 100%;">
+        <div>profile</div>
+    </div>
+</div>
+
+<div id="profile-info">
+    <img src="/static/picc.jpg" alt="PROFILE">
+    <div>Admin</div>
+    <div id="sign-out-btn">Sign Out</div>
+</div>
+
+<div id="admin-panel">
+    <div id="sidebar">
+        <div class="menu-item" id="addClassBtn">Add Class</div>
+        <div class="menu-item" id="addStudentBtn">Add Student</div>
+        <div class="menu-item" id="addTeacherBtn">Add Teacher</div>
+    </div>
+
+    <div id="content">
+        <div id="addClassForm" style="display: none;">
+            <h3>Add Class</h3>
+           
+            
+            
+                <table id="classTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Branch</th>
+                            <th>Year</th>
+                            <th>Section</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classTableBody">
+                        <!-- Rows for displaying fetched classes -->
+                        {% for class in classes %}
+                        <tr>
+                            <td><input type="text" name="id" value="{{ class[0] }}"></td>
+                            <td>
+                                <select name="branch">
+                                    <option value="D1" {% if class[1] == 'D1' %} selected {% endif %}>CS</option>
+                                    <option value="D2" {% if class[1] == 'D2' %} selected {% endif %}>EC</option>
+                                    <option value="D3" {% if class[1] == 'D3' %} selected {% endif %}>EEE</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="year">
+                                    <option value="1" {% if class[2] == 1 %} selected {% endif %}>1</option>
+                                    <option value="2" {% if class[2] == 2 %} selected {% endif %}>2</option>
+                                    <option value="3" {% if class[2] == 3 %} selected {% endif %}>3</option>
+                                    <option value="4" {% if class[2] == 4 %} selected {% endif %}>4</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="section">
+                                    <option value="A" {% if class[3] == 'A' %} selected {% endif %}>A</option>
+                                    <option value="B" {% if class[3] == 'B' %} selected {% endif %}>B</option>
+                                    <option value="C" {% if class[3] == 'C' %} selected {% endif %}>C</option>
+                                    <option value="D" {% if class[3] == 'D' %} selected {% endif %}>D</option>
+                                    <option value="NONE" {% if class[3] == 'NONE' %} selected {% endif %}>NONE</option>
+                                </select>
+                            </td>
+                            <td class="button-container">
+                                <!-- Buttons for updating and deleting rows -->
+                                <form action="{{ url_for('delete_row', table='class',id=class[0])}}" method="post">
+                                    <button type="submit">Delete</button>
+                                </form>
+                                <button type="button" class="update-class" data-id="{{ class[0] }}">Update</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" id="addClassRowBtn">Add Row</button>
+            
+        </div>
+
+        <div id="addStudentForm" style="display: none;">
+            <h3>Add Student</h3>
+            <form id="addStudentForm">
+                <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Password</th>
+                        <th>Name</th>
+                        <th>Roll No</th>
+                        <th>Branch</th>
+                        <th>Year</th>
+                        <th>Section</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <!-- Rows for displaying fetched students -->
+                    {% for student in students %}
+                    <tr>
+                        <td><input type="text" name="id" value="{{ student[0] }}"></td>
+                        <td><input type="text" name="password" value="{{ student[1] }}"></td>
+                        <td><input type="text" name="name" value="{{ student[2] }}"></td>
+                        <td><input type="text" name="rollno" value="{{ student[3] }}"></td>
+                        <td>
+                            <select name="branch">
+                                <option value="D1" {% if student[4] == 'D1' %} selected {% endif %}>CS</option>
+                                <option value="D2" {% if student[4] == 'D2' %} selected {% endif %}>EC</option>
+                                <option value="D3" {% if student[4] == 'D3' %} selected {% endif %}>EEE</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="year">
+                                <option value="1" {% if student[5] == 1 %} selected {% endif %}>1</option>
+                                <option value="2" {% if student[5] == 2 %} selected {% endif %}>2</option>
+                                <option value="3" {% if student[5] == 3 %} selected {% endif %}>3</option>
+                                <option value="4" {% if student[5] == 4 %} selected {% endif %}>4</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="section">
+                                <option value="A" {% if student[6] == 'A' %} selected {% endif %}>A</option>
+                                <option value="B" {% if student[6] == 'B' %} selected {% endif %}>B</option>
+                                <option value="C" {% if student[6] == 'C' %} selected {% endif %}>C</option>
+                                <option value="D" {% if student[6] == 'D' %} selected {% endif %}>D</option>
+                                <option value="NONE" {% if student[6] == 'NONE' %} selected {% endif %}>NONE</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="email" value="{{ student[7] }}"></td>
+                        <td>
+                        <!-- Buttons for updating and deleting rows -->
+                        <form action="{{ url_for('delete_row', table='student',id=student[0])}}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                        <button type="button" class="update-student" data-id="{{ student[0] }}">Update</button>
+                       
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+                <button type="button" id="addStudentRowBtn">Add Row</button>
+                            <!-- Add this inside the appropriate section of your HTML -->
+             
+            </form>
+        </div>
+
+
+        <div id="addTeacherForm" style="display: none;">
+            <h3>Add Teacher</h3>
+            <form id="addTeacherForm">
+                <table id="teacherTable">
+                <thead>
+                    <tr>
+                        <th >ID</th>
+                        <th >Password</th>
+                        <th >Name</th>
+                        <th >Department</th>
+                        <th >Email</th>
+                        <th >Action</th>
+                    </tr>                    
+                </thead>
+                <tbody id="teacherTableBody">
+                    <!-- Rows for displaying fetched teachers -->
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td><input type="text" name="id" value="{{ teacher[0] }}"></td>
+                        <td><input type="text" name="password" value="{{ teacher[1] }}"></td>
+                        <td><input type="text" name="name" value="{{ teacher[2] }}"></td>
+                        <td>
+                            <select name="department">
+                                <option value="D1" {% if teacher[3] == 'D1' %} selected {% endif %}>CS</option>
+                                <option value="D2" {% if teacher[3] == 'D2' %} selected {% endif %}>EC</option>
+                                <option value="D3" {% if teacher[3] == 'D3' %} selected {% endif %}>EEE</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="email" value="{{ teacher[4] }}"></td>
+                        <td class="button-container">
+                                <!-- Buttons for updating and deleting rows -->
+                                <form action="{{ url_for('delete_row', table='teacher',id=teacher[0])}}" method="post">
+                                    <button type="submit">Delete</button>
+                                </form>
+                                <button type="button" class="update-teacher" data-id="{{ teacher[0] }}">Update</button>
+                        </td>    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+                <button type="button" id="addTeacherRowBtn">Add Row</button>
+            </form>
+        </div>
+    </div>
+</div> 
+</body>
+</html>
+
+
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/student.css">
+    <title>Student Interface</title>
+    <script>
+       
+            var profileInfo = document.getElementById('profile-info');
+            var profileIcon = document.getElementById('profile-icon');
+            var signOutBtn = document.getElementById('sign-out-btn');
+            var menuItemClasses = document.getElementById('menu-item-classes');
+            var menuItemAssignments = document.getElementById('menu-item-assignments');
+
+            function toggleProfileInfo() {
+                if (profileInfo.style.display === 'none') {
+                    profileInfo.style.display = 'block';
+                } else {
+                    profileInfo.style.display = 'none';
+                }
+            }
+
+            function signOut() {
+                window.location.href = '/sign-out';
+            }
+
+            function showContent(content) {
+                var classesContent = document.getElementById('classes-content');
+                var assignmentsContent = document.getElementById('assignments-content');
+                if (content === 'Classes') {
+                    classesContent.style.display = 'block';
+                    assignmentsContent.style.display = 'none';
+                } else if (content === 'Assignments') {
+                    classesContent.style.display = 'none';
+                    assignmentsContent.style.display = 'block';
+                }
+            }
+
+            function loadLabCycles(labId) {
+                fetch(`/labcycles/${labId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var labCycleContent = document.getElementById('lab-cycle-content');
+                        labCycleContent.innerHTML = ''; // Clear existing lab cycle cards
+                        data.lab_cycles.forEach(labCycle => {
+                            var labCycleCard = document.createElement('div');
+                            labCycleCard.className = 'lab-cycle-card';
+                            labCycleCard.textContent = labCycle;
+                            labCycleCard.onclick = function() {
+                                loadPrograms(labId, labCycle);
+                            };
+                            labCycleContent.appendChild(labCycleCard);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching lab cycles:', error));
+            }
+            
+            function loadPrograms(className, labCycle) {
+                // Example implementation: Fetch programs for the selected class and lab cycle
+                // from the server and dynamically populate program cards in the DOM
+                fetchProgramsFromClassAndCycle(className, labCycle)
+                    .then(function(programs) {
+                        var content = document.getElementById('content');
+                        content.innerHTML = ''; // Clear existing program cards
+                        var heading = document.createElement('h2');
+                        heading.textContent = 'Lab Programs for Class: ' + className + ', Lab Cycle: ' + labCycle;
+                        content.appendChild(heading);
+                        programs.forEach(function(program) {
+                            var programCard = document.createElement('div');
+                            programCard.className = 'program-card';
+                            programCard.innerHTML = '<h3>' + program.title + '</h3>' +
+                                                    '<p>Description: ' + program.description + '</p>' +
+                                                    '<button>Submit Program</button>';
+                            content.appendChild(programCard);
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Error fetching programs:', error);
+                    });
+            }
+            
+
+
+    </script>
+    
+    
+    
+    
+</head>
+<body>
+
+<div id="header">
+    <h1>Smart Lab</h1>
+    <div id="profile-icon">
+        <img src="/static/picc.jpg" alt="PROFILE" style="width: 30px; height: 30px; border-radius: 100%;">
+        <div>profile</div>
+    </div>
+</div>
+
+<div id="profile-info">
+    <img src="/static/picc.jpg" alt="PROFILE">
+    <div>Admin</div>
+    <div id="sign-out-btn">Sign Out</div>
+</div>
+
+<div id="student-panel">
+    <div id="sidebar">
+        <div class="menu-item" onclick="showContent('Classes')">Classes</div>
+        <div class="menu-item" onclick="showContent('Assignments')">Assignments</div>
+    </div>
+
+    <div id="content">
+        <h2>Welcome Student</h2>
+        <div id="classes-content" style="display: none;">
+            <!-- Remove the static class cards -->
+            
+            
+                
+                {% for lab in labs %}
+                <div class="class-card">
+                <h3>{{ lab[0] }}</h3> <!-- Display lab name -->
+                <button onclick="loadLabCycles('{{ lab[0] }}')">View</button>
+                </div>
+                {% endfor %}
+
+            
+            
+        </div>
+
+
+        <div id="assignments-content" style="display: none;">
+            <div class="assignments-panel">
+                <h2>Your Assignments</h2>
+                <div class="assignment-card">
+                    <h3>Assignment Title 1</h3>
+                    <p>Due Date: mm/dd/yyyy</p>
+                    <p>Class: Lab 1</p>
+                    <button>Submit Assignment</button>
+                </div>
+
+                <div class="assignment-card">
+                    <h3>Assignment Title 2</h3>
+                    <p>Due Date: mm/dd/yyyy</p>
+                    <p>Class: Lab 2</p>
+                    <button>Submit Assignment</button>
+                </div>
+
+                <!-- Add more assignment cards as needed -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

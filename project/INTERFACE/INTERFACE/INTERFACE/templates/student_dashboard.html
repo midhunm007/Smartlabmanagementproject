@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/student.css">
+    <title>Student Interface</title>
+    <script>
+       
+            var profileInfo = document.getElementById('profile-info');
+            var profileIcon = document.getElementById('profile-icon');
+            var signOutBtn = document.getElementById('sign-out-btn');
+            var menuItemClasses = document.getElementById('menu-item-classes');
+            var menuItemAssignments = document.getElementById('menu-item-assignments');
+
+            function toggleProfileInfo() {
+                if (profileInfo.style.display === 'none') {
+                    profileInfo.style.display = 'block';
+                } else {
+                    profileInfo.style.display = 'none';
+                }
+            }
+
+            function signOut() {
+                window.location.href = '/sign-out';
+            }
+
+            function showContent(content) {
+                var classesContent = document.getElementById('classes-content');
+                var assignmentsContent = document.getElementById('assignments-content');
+                if (content === 'Classes') {
+                    classesContent.style.display = 'block';
+                    assignmentsContent.style.display = 'none';
+                } else if (content === 'Assignments') {
+                    classesContent.style.display = 'none';
+                    assignmentsContent.style.display = 'block';
+                }
+            }
+
+            function loadLabCycles(className) {
+                    // Here you can add logic to load lab cycles for the selected class
+                    //alert('Loading lab cycles for ' + className);
+                    // For simplicity, redirect to labCycles.html
+                    window.location.href = '/labcycles';
+                }
+                function loadLabCycles(labName) {
+    fetch(`/api/lab-cycles/${labName}`)
+        .then(response => response.json())
+        .then(data => {
+            // Assuming you have a function to display these lab cycles
+            displayLabCycles(data, labName);
+        })
+        .catch(error => console.error('Error fetching lab cycles:', error));
+}
+function displayLabCycles(labCycles, labName) {
+    const container = document.getElementById('lab-cycle-content');
+    container.innerHTML = `<h2>Lab Cycles for Class: ${labName}</h2>`; // Reset container and set header
+
+    labCycles.forEach(cycle => {
+        const cycleCard = document.createElement('div');
+        cycleCard.className = 'lab-cycle-card';
+        cycleCard.onclick = function() { loadPrograms(labName, cycle.name); };
+        cycleCard.textContent = cycle.name;
+        container.appendChild(cycleCard);
+    });
+}
+
+    </script>
+    
+    
+    
+    
+</head>
+<body>
+
+<div id="header">
+    <h1>Smart Lab</h1>
+    <div id="profile-icon">
+        <img src="/static/picc.jpg" alt="PROFILE" style="width: 30px; height: 30px; border-radius: 100%;">
+        <div>profile</div>
+    </div>
+</div>
+
+<div id="profile-info">
+    <img src="/static/picc.jpg" alt="PROFILE">
+    <div>Admin</div>
+    <div id="sign-out-btn">Sign Out</div>
+</div>
+
+<div id="student-panel">
+    <div id="sidebar">
+        <div class="menu-item" onclick="showContent('Classes')">Classes</div>
+        <div class="menu-item" onclick="showContent('Assignments')">Assignments</div>
+    </div>
+
+    <div id="content">
+        <h2>Welcome Student</h2>
+        <div id="classes-content" style="display: none;">
+            <!-- Remove the static class cards -->
+            
+            
+                
+                {% for lab in labs %}
+                <div class="class-card">
+                <h3>{{ lab[0] }}</h3> <!-- Display lab name -->
+                <button onclick="loadLabCycles('{{ lab[0] }}')">View</button>
+                </div>
+                {% endfor %}
+
+            
+            
+        </div>
+
+
+        <div id="assignments-content" style="display: none;">
+            <div class="assignments-panel">
+                <h2>Your Assignments</h2>
+                <div class="assignment-card">
+                    <h3>Assignment Title 1</h3>
+                    <p>Due Date: mm/dd/yyyy</p>
+                    <p>Class: Lab 1</p>
+                    <button>Submit Assignment</button>
+                </div>
+
+                <div class="assignment-card">
+                    <h3>Assignment Title 2</h3>
+                    <p>Due Date: mm/dd/yyyy</p>
+                    <p>Class: Lab 2</p>
+                    <button>Submit Assignment</button>
+                </div>
+
+                <!-- Add more assignment cards as needed -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
